@@ -31,9 +31,17 @@ public class LoginApp extends Application {
 		enterButtonSetUp();
 		exitButtonSetUp();
 
+		applyStyle();
+
 		mergeElements();
 
 		sceneSetUp();
+	}
+
+	private void applyStyle() {
+		pane.setStyle("-fx-background-color: linear-gradient"
+				+ "(from 0% 0% to 100% 100%, blue 0%, silver 100%);");
+
 	}
 
 	@Override
@@ -46,7 +54,8 @@ public class LoginApp extends Application {
 
 	private void mergeElements() {
 
-		getPane().getChildren().addAll(getTextField(), getPasswordField(), getEnterButton(), getExitButton());
+		getPane().getChildren().addAll(getTextField(), getPasswordField(),
+				getEnterButton(), getExitButton());
 	}
 
 	private void exitButtonSetUp() {
@@ -126,18 +135,21 @@ public class LoginApp extends Application {
 	}
 
 	private void repositionItems() {
-		getTextField().setLayoutX((getPane().getWidth() - getTextField().getWidth()) / 2);
+		getTextField().setLayoutX(
+				(getPane().getWidth() - getTextField().getWidth()) / 2);
 		getTextField().setLayoutY(10);
 
-		getPasswordField().setLayoutX((getPane().getWidth() - getPasswordField().getWidth()) / 2);
+		getPasswordField().setLayoutX(
+				(getPane().getWidth() - getPasswordField().getWidth()) / 2);
 		getPasswordField().setLayoutY(50);
 
-		getEnterButton().setLayoutX((getPane().getWidth() - getEnterButton().getWidth()) / 2);
+		getEnterButton().setLayoutX(
+				(getPane().getWidth() - getEnterButton().getWidth()) / 2);
 		getEnterButton().setLayoutY(90);
-		
-		getExitButton().setLayoutX((getPane().getWidth() - getExitButton().getWidth()) / 2);
-		getExitButton().setLayoutY(120);
 
+		getExitButton().setLayoutX(
+				(getPane().getWidth() - getExitButton().getWidth()) / 2);
+		getExitButton().setLayoutY(120);
 
 	}
 
