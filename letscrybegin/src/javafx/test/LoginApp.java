@@ -35,7 +35,13 @@ public class LoginApp extends Application {
 
 		mergeElements();
 
+		initListeners();
+
 		sceneSetUp();
+	}
+
+	private void initListeners() {
+		exitButton.setOnAction(event -> System.exit(0));
 	}
 
 	private void applyStyle() {
@@ -49,11 +55,9 @@ public class LoginApp extends Application {
 		stage.setScene(getScene());
 		stage.show();
 		repositionItems();
-
 	}
 
 	private void mergeElements() {
-
 		getPane().getChildren().addAll(getTextField(), getPasswordField(),
 				getEnterButton(), getExitButton());
 	}
