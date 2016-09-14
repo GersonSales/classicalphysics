@@ -21,7 +21,7 @@ public class Ball {
 	private BodyDef bodyDef;
 
 	private Double radius;
-	public Charge charge;
+	private Charge charge;
 
 	public Ball(Texture texture, Double radius, Type charge) {
 		if (charge.equals(Type.POSITIVE)) {
@@ -33,6 +33,14 @@ public class Ball {
 		this.texture = this.charge.getTexture();
 		this.radius = radius;
 		initEntity();
+	}
+
+	public boolean isPositive() {
+		return charge instanceof Positive;
+	}
+
+	public boolean isNegative() {
+		return charge instanceof Negative;
 	}
 
 	private void initEntity() {
@@ -68,7 +76,13 @@ public class Ball {
 		fixtureDef.shape.setRadius(PhysicsManager.toMeters(colisionLimit));
 	}
 
-	private void setNewEntity() {
+	private void initNewEntity() {
+		// initFixtureDef();
+
+		initTexture();
+
+		// initBodyType();
+
 		PhysicsEntity newEntity = new PhysicsEntity(
 				getEntity().getEntityType());
 		newEntity.setPosition(590, 173);
@@ -102,7 +116,8 @@ public class Ball {
 		}
 
 		texture = charge.getTexture();
-		initEntity();
+		initTexture();
+		entity.setGraphics(texture);
 	}
 
 	private void setEntity(PhysicsEntity entity) {

@@ -67,14 +67,7 @@ public class Project extends GameApplication {
 		chargeChanger = new Button();
 		chargeChanger.setText("-");
 
-		chargeChanger.setOnAction(event -> {
-			flag = !flag;
-			if (flag)
-				chargeChanger.setText("+");
-			else
-				chargeChanger.setText("-");
-			;
-		});
+		chargeChanger.setOnAction(event -> ball.changeCharge());
 		uiRoot.getChildren().addAll(slider, upperPlateDistance,
 				inferiorPlateDistance, chargeChanger);
 
@@ -120,6 +113,8 @@ public class Project extends GameApplication {
 	}
 
 	private boolean flag = true;
+	private double gravityX;
+	private double gravityY;
 
 	private void initBall() {
 		if (flag) {
@@ -193,15 +188,15 @@ public class Project extends GameApplication {
 
 	}
 
-	private void test() {
-		removeEntity(ball.getEntity());
-		ball.changeCharge();
-		addEntities(ball.getEntity());
-		ball.setLinearVelocity(new Point2D(5, 0));
-	}
-
 	@Override
 	protected void onUpdate(long now) {
+		gravityY = slider.getValue();
+		if (ball.isPositive()) {
+			gravityY = Math.abs(gravityY);
+		}else {
+			gravityY = Math.abs(gravityY) * -1;
+			
+		}
 
 		int value = (int) Math.abs(ball.getPosition().getY()
 				- (upperPlate.getPosition().getY() + upperPlate.getHeight()));
@@ -213,8 +208,9 @@ public class Project extends GameApplication {
 		upperPlateDistance.setText("Distance: " + value + "mm");
 		inferiorPlateDistance.setText("Distance: " + value2 + "mm");
 
+
 		if (field.getBoundsInParent().intersects(ball.getBoundsInParent())) {
-			physicsManager.setGravity(0, slider.getValue());
+			physicsManager.setGravity(0, gravityY);
 		} else {
 			physicsManager.setGravity(0, 0);
 
@@ -229,18 +225,17 @@ public class Project extends GameApplication {
 
 		if (inferiorPlate.getBoundsInParent()
 				.intersects(ball.getBoundsInParent())) {
-			test();
-			// removeEntity(ball.getEntity());
-			// initBall();
+			removeEntity(ball.getEntity());
+			initBall();
 
 		}
 
-		// if (upperPlate.getBoundsInParent()
-		// .intersects(ball.getBoundsInParent())) {
-		//
-		// removeEntity(ball.getEntity());
-		// initBall();
-		// }
+		if (upperPlate.getBoundsInParent()
+				.intersects(ball.getBoundsInParent())) {
+
+			removeEntity(ball.getEntity());
+			initBall();
+		}
 
 	}
 
