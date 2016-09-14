@@ -4,6 +4,7 @@ import org.jbox2d.dynamics.BodyType;
 
 import com.almasb.fxgl.GameApplication;
 import com.almasb.fxgl.GameSettings;
+import com.almasb.fxgl.asset.AssetManager;
 import com.almasb.fxgl.asset.Assets;
 import com.almasb.fxgl.asset.Texture;
 import com.almasb.fxgl.entity.Entity;
@@ -11,16 +12,13 @@ import com.almasb.fxgl.entity.EntityType;
 import com.almasb.fxgl.physics.PhysicsEntity;
 
 import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.Pane;
 
 public class Project extends GameApplication {
-
-	private enum Type implements EntityType {
-		BALL, WALL, PLAYER, FIELD, BACKGROUND, MINUS, PLUS;
-	}
 
 	private final int WIDTH = 800;
 	private final int HEIGHT = 600;
@@ -42,6 +40,7 @@ public class Project extends GameApplication {
 	private Label upperPlateDistance;
 	private Label inferiorPlateDistance;
 	private Button chargeChanger;
+	private Pane myRoot;
 
 	@Override
 	protected void initSettings(GameSettings settings) {
@@ -61,6 +60,7 @@ public class Project extends GameApplication {
 
 	@Override
 	protected void initUI(Pane uiRoot) {
+		myRoot = uiRoot;
 		slider = new Slider();
 		upperPlateDistance = new Label();
 		inferiorPlateDistance = new Label();
@@ -122,50 +122,15 @@ public class Project extends GameApplication {
 	private boolean flag = true;
 
 	private void initBall() {
-		try {
-			if (flag) {
-				ballTexture = assetManager.loadTexture("plusBall.png");
-			} else {
-				ballTexture = assetManager.loadTexture("minusBall.png");
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (flag) {
+			ball = new Ball(ballTexture, 30d, Type.POSITIVE);
+		} else {
+			ball = new Ball(ballTexture, 30d, Type.NEGATIVE);
 		}
-
-		ball = new Ball(ballTexture, 30d);
-		//
-		// int radius = 30;
-		// double colisionLimit = radius * 0.4;
-		//
-		// FixtureDef fixtureDef = new FixtureDef();
-		// fixtureDef.restitution = .5f;
-		// fixtureDef.density = .5f;
-		// fixtureDef.shape = new CircleShape();
-		// fixtureDef.shape.setRadius(PhysicsManager.toMeters(colisionLimit));
-		//
-		//
-		//
-		// ballTexture.setFitWidth(radius);
-		// ballTexture.setFitHeight(radius);
-		//
-		// BodyDef bodyDef = new BodyDef();
-		// bodyDef.type = BodyType.DYNAMIC;
-		//
-		// ball = new PhysicsEntity(Type.BALL);
-		// ball.setPosition(590, 173);
-		// ball.setGraphics(ballTexture);
-		// ball.setFixtureDef(fixtureDef);
-		// ball.setBodyDef(bodyDef);
-		//
-		// Body body = Utils.world.createBody(bodyDef);
-		// body.createFixture(fixtureDef);
-		// ball.setUserData(body);
 
 		addEntities(ball.getEntity());
 
 		ball.setLinearVelocity(new Point2D(5, 0));
-		// new Point2D(0, 170).subtract(ball.getPosition()).multiply(.1));
 
 	}
 
@@ -228,10 +193,23 @@ public class Project extends GameApplication {
 
 	}
 
+	private void test() {
+		System.out.println();
+		getEntitiesInRange(new Rectangle2D(0, 0, 1000, 1000),
+				Type.BALL).get(0).setGraphics(ball.charge.getTexture());
+		// addEntities(ball.getEntity());
+
+		// getAllEntities().remove(ball.getEntity());
+		// ball.changeCharge();
+		// ball.setPosition(590, 173);
+		// // initBall();
+		// getAllEntities().add(ball.getEntity());
+		//// addEntities(ball.getEntity());
+
+	}
+
 	@Override
 	protected void onUpdate(long now) {
-
-		System.out.println(flag);
 
 		int value = (int) Math.abs(ball.getPosition().getY()
 				- (upperPlate.getPosition().getY() + upperPlate.getHeight()));
@@ -259,17 +237,18 @@ public class Project extends GameApplication {
 
 		if (inferiorPlate.getBoundsInParent()
 				.intersects(ball.getBoundsInParent())) {
-			removeEntity(ball.getEntity());
-			initBall();
+			test();
+			// removeEntity(ball.getEntity());
+			// initBall();
 
 		}
 
-		if (upperPlate.getBoundsInParent()
-				.intersects(ball.getBoundsInParent())) {
-
-			removeEntity(ball.getEntity());
-			initBall();
-		}
+		// if (upperPlate.getBoundsInParent()
+		// .intersects(ball.getBoundsInParent())) {
+		//
+		// removeEntity(ball.getEntity());
+		// initBall();
+		// }
 
 	}
 
