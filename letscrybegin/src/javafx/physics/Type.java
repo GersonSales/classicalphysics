@@ -3,5 +3,5 @@ package javafx.physics;
 import com.almasb.fxgl.entity.EntityType;
 
 public enum Type implements EntityType {
-	BALL;
+	BALL, WALL, PLAYER, FIELD, BACKGROUND, MINUS, PLUS;
 }

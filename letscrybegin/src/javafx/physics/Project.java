@@ -1,10 +1,6 @@
 package javafx.physics;
 
-import org.jbox2d.collision.shapes.CircleShape;
-import org.jbox2d.dynamics.Body;
-import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
-import org.jbox2d.dynamics.FixtureDef;
 
 import com.almasb.fxgl.GameApplication;
 import com.almasb.fxgl.GameSettings;
@@ -13,10 +9,8 @@ import com.almasb.fxgl.asset.Texture;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityType;
 import com.almasb.fxgl.physics.PhysicsEntity;
-import com.almasb.fxgl.physics.PhysicsManager;
 
 import javafx.geometry.Point2D;
-import javafx.rainball.Utils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -33,7 +27,7 @@ public class Project extends GameApplication {
 
 	private Assets assets;
 
-	private PhysicsEntity ball;
+	private Ball ball;
 	private Texture ballTexture;
 
 	private PhysicsEntity inferiorPlate;
@@ -128,15 +122,6 @@ public class Project extends GameApplication {
 	private boolean flag = true;
 
 	private void initBall() {
-		int radius = 30;
-		double colisionLimit = radius * 0.4;
-
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.restitution = .5f;
-		fixtureDef.density = .5f;
-		fixtureDef.shape = new CircleShape();
-		fixtureDef.shape.setRadius(PhysicsManager.toMeters(colisionLimit));
-
 		try {
 			if (flag) {
 				ballTexture = assetManager.loadTexture("plusBall.png");
@@ -148,23 +133,36 @@ public class Project extends GameApplication {
 			e.printStackTrace();
 		}
 
-		ballTexture.setFitWidth(radius);
-		ballTexture.setFitHeight(radius);
+		ball = new Ball(ballTexture, 30d);
+		//
+		// int radius = 30;
+		// double colisionLimit = radius * 0.4;
+		//
+		// FixtureDef fixtureDef = new FixtureDef();
+		// fixtureDef.restitution = .5f;
+		// fixtureDef.density = .5f;
+		// fixtureDef.shape = new CircleShape();
+		// fixtureDef.shape.setRadius(PhysicsManager.toMeters(colisionLimit));
+		//
+		//
+		//
+		// ballTexture.setFitWidth(radius);
+		// ballTexture.setFitHeight(radius);
+		//
+		// BodyDef bodyDef = new BodyDef();
+		// bodyDef.type = BodyType.DYNAMIC;
+		//
+		// ball = new PhysicsEntity(Type.BALL);
+		// ball.setPosition(590, 173);
+		// ball.setGraphics(ballTexture);
+		// ball.setFixtureDef(fixtureDef);
+		// ball.setBodyDef(bodyDef);
+		//
+		// Body body = Utils.world.createBody(bodyDef);
+		// body.createFixture(fixtureDef);
+		// ball.setUserData(body);
 
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyType.DYNAMIC;
-
-		ball = new PhysicsEntity(Type.BALL);
-		ball.setPosition(590, 173);
-		ball.setGraphics(ballTexture);
-		ball.setFixtureDef(fixtureDef);
-		ball.setBodyDef(bodyDef);
-
-		Body body = Utils.world.createBody(bodyDef);
-		body.createFixture(fixtureDef);
-		ball.setUserData(body);
-
-		addEntities(ball);
+		addEntities(ball.getEntity());
 
 		ball.setLinearVelocity(new Point2D(5, 0));
 		// new Point2D(0, 170).subtract(ball.getPosition()).multiply(.1));
@@ -254,14 +252,14 @@ public class Project extends GameApplication {
 
 		if (!background.getBoundsInParent()
 				.intersects(ball.getBoundsInParent())) {
-			removeEntity(ball);
+			removeEntity(ball.getEntity());
 			initBall();
 
 		}
 
 		if (inferiorPlate.getBoundsInParent()
 				.intersects(ball.getBoundsInParent())) {
-			removeEntity(ball);
+			removeEntity(ball.getEntity());
 			initBall();
 
 		}
@@ -269,7 +267,7 @@ public class Project extends GameApplication {
 		if (upperPlate.getBoundsInParent()
 				.intersects(ball.getBoundsInParent())) {
 
-			removeEntity(ball);
+			removeEntity(ball.getEntity());
 			initBall();
 		}
 
