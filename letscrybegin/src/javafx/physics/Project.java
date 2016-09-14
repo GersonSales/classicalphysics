@@ -194,18 +194,10 @@ public class Project extends GameApplication {
 	}
 
 	private void test() {
-		System.out.println();
-		getEntitiesInRange(new Rectangle2D(0, 0, 1000, 1000),
-				Type.BALL).get(0).setGraphics(ball.charge.getTexture());
-		// addEntities(ball.getEntity());
-
-		// getAllEntities().remove(ball.getEntity());
-		// ball.changeCharge();
-		// ball.setPosition(590, 173);
-		// // initBall();
-		// getAllEntities().add(ball.getEntity());
-		//// addEntities(ball.getEntity());
-
+		removeEntity(ball.getEntity());
+		ball.changeCharge();
+		addEntities(ball.getEntity());
+		ball.setLinearVelocity(new Point2D(5, 0));
 	}
 
 	@Override

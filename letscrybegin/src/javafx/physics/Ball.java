@@ -32,10 +32,10 @@ public class Ball {
 		}
 		this.texture = this.charge.getTexture();
 		this.radius = radius;
-		initentity();
+		initEntity();
 	}
 
-	private void initentity() {
+	private void initEntity() {
 		initFixtureDef();
 
 		initTexture();
@@ -68,7 +68,17 @@ public class Ball {
 		fixtureDef.shape.setRadius(PhysicsManager.toMeters(colisionLimit));
 	}
 
-	public Entity getEntity() {
+	private void setNewEntity() {
+		PhysicsEntity newEntity = new PhysicsEntity(
+				getEntity().getEntityType());
+		newEntity.setPosition(590, 173);
+		newEntity.setGraphics(texture);
+		newEntity.setFixtureDef(fixtureDef);
+		newEntity.setBodyDef(bodyDef);
+		setEntity(newEntity);
+	}
+
+	public PhysicsEntity getEntity() {
 		return this.entity;
 	}
 
@@ -91,7 +101,12 @@ public class Ball {
 			this.charge = new Negative();
 		}
 
-		entity.setGraphics(charge.getTexture());
+		texture = charge.getTexture();
+		initEntity();
+	}
+
+	private void setEntity(PhysicsEntity entity) {
+		this.entity = entity;
 	}
 
 	public void setPosition(int posX, int posY) {

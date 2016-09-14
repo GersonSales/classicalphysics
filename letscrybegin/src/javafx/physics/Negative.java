@@ -9,7 +9,7 @@ public class Negative implements Charge {
 	public Texture getTexture() {
 		AssetManager assetManager = new AssetManager();
 		try {
-			return assetManager.loadTexture("inferiorPlate.png");
+			return assetManager.loadTexture("minusBall.png");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
