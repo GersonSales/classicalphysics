@@ -4,17 +4,15 @@ import org.jbox2d.dynamics.BodyType;
 
 import com.almasb.fxgl.GameApplication;
 import com.almasb.fxgl.GameSettings;
-import com.almasb.fxgl.asset.AssetManager;
 import com.almasb.fxgl.asset.Assets;
 import com.almasb.fxgl.asset.Texture;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.EntityType;
 import com.almasb.fxgl.physics.PhysicsEntity;
 
 import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.Pane;
 
@@ -39,6 +37,7 @@ public class Project extends GameApplication {
 	private Slider slider;
 	private Label upperPlateDistance;
 	private Label inferiorPlateDistance;
+	private Label distanceBetweenPlates;
 	private Button chargeChanger;
 	private Pane myRoot;
 
@@ -64,12 +63,12 @@ public class Project extends GameApplication {
 		slider = new Slider();
 		upperPlateDistance = new Label();
 		inferiorPlateDistance = new Label();
+		distanceBetweenPlates = new Label();
 		chargeChanger = new Button();
-		chargeChanger.setText("-");
-
+		chargeChanger.setText("Change ball charge");
 		chargeChanger.setOnAction(event -> ball.changeCharge());
 		uiRoot.getChildren().addAll(slider, upperPlateDistance,
-				inferiorPlateDistance, chargeChanger);
+				inferiorPlateDistance, chargeChanger, distanceBetweenPlates);
 
 		initMainMenu(uiRoot);
 
@@ -81,11 +80,16 @@ public class Project extends GameApplication {
 
 		inferiorPlateDistance.setLayoutX(300);
 		inferiorPlateDistance.setLayoutY(315);
+		
+		distanceBetweenPlates.setLayoutX(300);
+		distanceBetweenPlates.setLayoutY(330);
 
-		chargeChanger.setLayoutX(200);
-		chargeChanger.setLayoutY(300);
+		
 
-		slider.setMin(-10);
+		chargeChanger.setLayoutX(150);
+		chargeChanger.setLayoutY(330);
+
+		slider.setMin(0);
 		slider.setMax(10);
 	}
 
@@ -112,17 +116,11 @@ public class Project extends GameApplication {
 		addEntities(upperPlate);
 	}
 
-	private boolean flag = true;
-	private double gravityX;
 	private double gravityY;
 
 	private void initBall() {
-		if (flag) {
-			ball = new Ball(ballTexture, 30d, Type.POSITIVE);
-		} else {
-			ball = new Ball(ballTexture, 30d, Type.NEGATIVE);
-		}
-
+		ball.changeCharge();
+		ball.initEntity();
 		addEntities(ball.getEntity());
 
 		ball.setLinearVelocity(new Point2D(5, 0));
@@ -135,6 +133,7 @@ public class Project extends GameApplication {
 
 	@Override
 	protected void initGame(Pane gameRoot) {
+		ball = new Ball(30d);
 
 		physicsManager.setGravity(0, 0);
 
@@ -193,9 +192,9 @@ public class Project extends GameApplication {
 		gravityY = slider.getValue();
 		if (ball.isPositive()) {
 			gravityY = Math.abs(gravityY);
-		}else {
+		} else {
 			gravityY = Math.abs(gravityY) * -1;
-			
+
 		}
 
 		int value = (int) Math.abs(ball.getPosition().getY()
@@ -205,9 +204,13 @@ public class Project extends GameApplication {
 				ball.getPosition().getY() - (inferiorPlate.getPosition().getY()
 						- inferiorPlate.getHeight()));
 
+		int value3 = (int) Math.abs(upperPlate.getPosition().getY()
+				- (inferiorPlate.getPosition().getY()
+						- inferiorPlate.getHeight()));
+
 		upperPlateDistance.setText("Distance: " + value + "mm");
 		inferiorPlateDistance.setText("Distance: " + value2 + "mm");
-
+		distanceBetweenPlates.setText("Distance: " + value3 + "mm");
 
 		if (field.getBoundsInParent().intersects(ball.getBoundsInParent())) {
 			physicsManager.setGravity(0, gravityY);
@@ -218,22 +221,19 @@ public class Project extends GameApplication {
 
 		if (!background.getBoundsInParent()
 				.intersects(ball.getBoundsInParent())) {
-			removeEntity(ball.getEntity());
+
 			initBall();
 
 		}
 
 		if (inferiorPlate.getBoundsInParent()
 				.intersects(ball.getBoundsInParent())) {
-			removeEntity(ball.getEntity());
 			initBall();
 
 		}
 
 		if (upperPlate.getBoundsInParent()
 				.intersects(ball.getBoundsInParent())) {
-
-			removeEntity(ball.getEntity());
 			initBall();
 		}
 

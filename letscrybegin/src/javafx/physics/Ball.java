@@ -6,7 +6,6 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 
 import com.almasb.fxgl.asset.Texture;
-import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.PhysicsEntity;
 import com.almasb.fxgl.physics.PhysicsManager;
 
@@ -23,13 +22,8 @@ public class Ball {
 	private Double radius;
 	private Charge charge;
 
-	public Ball(Texture texture, Double radius, Type charge) {
-		if (charge.equals(Type.POSITIVE)) {
-			this.charge = new Positive();
-		} else if (charge.equals(Type.NEGATIVE)) {
-			this.charge = new Negative();
-
-		}
+	public Ball(Double radius) {
+		this.charge = new Positive();
 		this.texture = this.charge.getTexture();
 		this.radius = radius;
 		initEntity();
@@ -43,7 +37,7 @@ public class Ball {
 		return charge instanceof Negative;
 	}
 
-	private void initEntity() {
+	void initEntity() {
 		initFixtureDef();
 
 		initTexture();
@@ -53,6 +47,7 @@ public class Ball {
 		entity = new PhysicsEntity(Type.BALL);
 		entity.setPosition(590, 173);
 		entity.setGraphics(texture);
+
 		entity.setFixtureDef(fixtureDef);
 		entity.setBodyDef(bodyDef);
 	}
@@ -74,22 +69,6 @@ public class Ball {
 		fixtureDef.density = .5f;
 		fixtureDef.shape = new CircleShape();
 		fixtureDef.shape.setRadius(PhysicsManager.toMeters(colisionLimit));
-	}
-
-	private void initNewEntity() {
-		// initFixtureDef();
-
-		initTexture();
-
-		// initBodyType();
-
-		PhysicsEntity newEntity = new PhysicsEntity(
-				getEntity().getEntityType());
-		newEntity.setPosition(590, 173);
-		newEntity.setGraphics(texture);
-		newEntity.setFixtureDef(fixtureDef);
-		newEntity.setBodyDef(bodyDef);
-		setEntity(newEntity);
 	}
 
 	public PhysicsEntity getEntity() {
@@ -118,10 +97,6 @@ public class Ball {
 		texture = charge.getTexture();
 		initTexture();
 		entity.setGraphics(texture);
-	}
-
-	private void setEntity(PhysicsEntity entity) {
-		this.entity = entity;
 	}
 
 	public void setPosition(int posX, int posY) {
