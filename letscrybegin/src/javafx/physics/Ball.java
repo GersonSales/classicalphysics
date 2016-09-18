@@ -14,6 +14,7 @@ import javafx.geometry.Point2D;
 
 public class Ball {
 
+	private static final Double BALL_MASS = 10.0;
 	private PhysicsEntity entity;
 	private Texture texture;
 	private FixtureDef fixtureDef;
@@ -21,11 +22,13 @@ public class Ball {
 
 	private Double radius;
 	private Charge charge;
+	private Double mass;
 
 	public Ball(Double radius) {
 		this.charge = new Positive();
 		this.texture = this.charge.getTexture();
 		this.radius = radius;
+		this.mass = BALL_MASS;
 		initEntity();
 	}
 
@@ -82,11 +85,27 @@ public class Ball {
 	public Bounds getBoundsInParent() {
 		return getEntity().getBoundsInParent();
 	}
-
+	
+	public Double getMass() {
+		return this.mass;
+	}
+	
+	public void setMass(Double mass) {
+		this.mass = mass;
+	}
+	
 	public void setLinearVelocity(Point2D point2d) {
 		entity.setLinearVelocity(point2d);
 	}
-
+	
+	public void increaseMass(Double mass) {
+		this.mass += mass;
+	}
+	
+	public void decreaseMass(Double mass) {
+		this.mass -= mass;
+	}
+	
 	public void changeCharge() {
 		if (this.charge instanceof Negative) {
 			this.charge = new Positive();
