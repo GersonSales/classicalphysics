@@ -1,0 +1,53 @@
+package javafx.physics;
+
+import com.almasb.fxgl.physics.PhysicsEntity;
+
+import javafx.geometry.Point2D;
+
+public class Util {
+
+	public static double distanceOf(Point2D position, Point2D otherPosition) {
+		return position.distance(otherPosition);
+	}
+
+	public static double distanceOf(PhysicsEntity entity, PhysicsEntity otherEntity) {
+		double posX = entity.getPosition().getX();
+		double posY = entity.getPosition().getY();
+
+		double posXEntity = otherEntity.getPosition().getX();
+		double posYEntity = otherEntity.getPosition().getY();
+
+		double lowestDistance = distance(posX, posXEntity, posY, posYEntity);
+		double lowestX = posX;
+		double lowestY = posY;
+
+		for (int x = (int) posX; x <= posX + entity.getWidth(); x++) {
+			for (int y = (int) posY; y <= posY + entity.getHeight(); y++) {
+				double distance = distance(x, posXEntity, y, posYEntity);
+				if (distance < lowestDistance) {
+					lowestDistance = distance;
+					lowestX = x;
+					lowestY = y;
+				}
+			}
+
+		}
+
+		for (int x = (int) posXEntity; x <= posXEntity + otherEntity.getWidth(); x++) {
+			for (int y = (int) posYEntity; y <= posYEntity + otherEntity.getHeight(); y++) {
+				double distance = distance(x, lowestX, y, lowestY);
+				lowestDistance = distance < lowestDistance ? distance : lowestDistance;
+			}
+
+		}
+
+		return lowestDistance;
+	}
+
+	private static double distance(double x1, double x2, double y1, double y2) {
+		double a = x1 - x2;
+		double b = y1 - y2;
+		return Math.sqrt(a * a + b * b);
+	}
+
+}

@@ -23,8 +23,12 @@ public class Ball {
 	private Double radius;
 	private Charge charge;
 	private Double mass;
+	private double posX;
+	private double posY;
 
-	public Ball(Double radius) {
+	public Ball(Double radius, double posX, double posY) {
+		this.posX = posX;
+		this.posY = posY;
 		this.charge = new Positive();
 		this.texture = this.charge.getTexture();
 		this.radius = radius;
@@ -40,6 +44,10 @@ public class Ball {
 		return charge instanceof Negative;
 	}
 
+	public double getRadius() {
+		return this.radius;
+	}
+
 	void initEntity() {
 		initFixtureDef();
 
@@ -48,11 +56,15 @@ public class Ball {
 		initBodyType();
 
 		entity = new PhysicsEntity(Type.BALL);
-		entity.setPosition(590, 173);
+		entity.setPosition(posX, posY);
 		entity.setGraphics(texture);
 
 		entity.setFixtureDef(fixtureDef);
 		entity.setBodyDef(bodyDef);
+	}
+
+	public void setRotate() {
+		getEntity().setRotate(0);
 	}
 
 	private void initBodyType() {
@@ -85,27 +97,27 @@ public class Ball {
 	public Bounds getBoundsInParent() {
 		return getEntity().getBoundsInParent();
 	}
-	
+
 	public Double getMass() {
 		return this.mass;
 	}
-	
+
 	public void setMass(Double mass) {
 		this.mass = mass;
 	}
-	
+
 	public void setLinearVelocity(Point2D point2d) {
 		entity.setLinearVelocity(point2d);
 	}
-	
+
 	public void increaseMass(Double mass) {
 		this.mass += mass;
 	}
-	
+
 	public void decreaseMass(Double mass) {
 		this.mass -= mass;
 	}
-	
+
 	public void changeCharge() {
 		if (this.charge instanceof Negative) {
 			this.charge = new Positive();
@@ -118,6 +130,10 @@ public class Ball {
 		entity.setGraphics(texture);
 	}
 
+	public double distanceOf(PhysicsEntity otherEntity) {
+		return Util.distanceOf(getEntity(), otherEntity);
+	}
+
 	public void setPosition(int posX, int posY) {
 		entity.setPosition(590, 173);
 
@@ -126,6 +142,18 @@ public class Ball {
 	@Override
 	public String toString() {
 		return charge.getClass().toString();
+	}
+
+	public Point2D getCenter() {
+		return new Point2D(getPosition().getX() + getWidth() / 2, getPosition().getY() + getHeight() / 2);
+	}
+
+	private double getHeight() {
+		return getEntity().getHeight();
+	}
+
+	private double getWidth() {
+		return getEntity().getWidth();
 	}
 
 }

@@ -1,7 +1,5 @@
 package javafx.physics;
 
-import org.jbox2d.dynamics.BodyType;
-
 import com.almasb.fxgl.GameApplication;
 import com.almasb.fxgl.GameSettings;
 import com.almasb.fxgl.asset.Assets;
@@ -23,8 +21,9 @@ public class Project extends GameApplication {
 
 	private Ball ball;
 
-	private PhysicsEntity inferiorPlate;
-	private PhysicsEntity upperPlate;
+	private Plate inferiorPlate;
+
+	private Plate upperPlate;
 	private PhysicsEntity leftWall;
 	private PhysicsEntity rightWall;
 
@@ -33,6 +32,7 @@ public class Project extends GameApplication {
 
 	private Slider slider;
 	private Slider massSlider;
+	private Slider ballSpeed;
 	private Label upperPlateDistance;
 	private Label inferiorPlateDistance;
 	private Label distanceBetweenPlates;
@@ -55,37 +55,38 @@ public class Project extends GameApplication {
 	protected void initAssets() throws Exception {
 		assets = assetManager.cache();
 		assets.logCached();
+		ball = new Ball(30d, 590, 170);
 
 	}
 
 	@Override
 	protected void initUI(Pane uiRoot) {
-		slider = new Slider();
-		massSlider = new Slider();
-		upperPlateDistance = new Label();
-		inferiorPlateDistance = new Label();
-		distanceBetweenPlates = new Label();
-		massValue = new Label();
-		actuatingForce = new Label();
-		ballAcceleraction = new Label();
-		finalBallVelocity = new Label();
-		
-		chargeChanger = new Button();
-		chargeChanger.setText("Change ball charge");
-		chargeChanger.setOnAction(event -> ball.changeCharge());
-		uiRoot.getChildren().addAll(slider, massSlider, upperPlateDistance, inferiorPlateDistance, chargeChanger,
-				distanceBetweenPlates, massValue, actuatingForce, finalBallVelocity, ballAcceleraction);
+		initComponents(uiRoot);
 
 		initMainMenu(uiRoot);
 
+		initLayout();
+
+	}
+
+	private void initLayout() {
 		slider.setLayoutX(500);
 		slider.setLayoutY(500);
 
 		slider.setMin(0);
 		slider.setMax(10);
-		
+
+		ballSpeed.setLayoutX(500);
+		ballSpeed.setLayoutY(600);
+
+		ballSpeed.setMin(5);
+		ballSpeed.setMax(100);
+
 		massSlider.setLayoutX(500);
 		massSlider.setLayoutY(550);
+
+		massSlider.setMin(.1);
+		massSlider.setMax(100);
 
 		upperPlateDistance.setLayoutX(300);
 		upperPlateDistance.setLayoutY(300);
@@ -99,48 +100,63 @@ public class Project extends GameApplication {
 		chargeChanger.setLayoutX(150);
 		chargeChanger.setLayoutY(330);
 
+		chargeChanger.setText("Change ball charge");
+
 		actuatingForce.setLayoutX(200);
 		actuatingForce.setLayoutY(400);
-		
+
 		ballAcceleraction.setLayoutX(220);
 		ballAcceleraction.setLayoutY(420);
-		
+
 		finalBallVelocity.setLayoutX(240);
 		finalBallVelocity.setLayoutY(440);
+	}
 
+	private void initComponents(Pane uiRoot) {
+		slider = new Slider();
+		massSlider = new Slider();
+		ballSpeed = new Slider();
+		upperPlateDistance = new Label();
+		inferiorPlateDistance = new Label();
+		distanceBetweenPlates = new Label();
+		massValue = new Label();
+		actuatingForce = new Label();
+		ballAcceleraction = new Label();
+		finalBallVelocity = new Label();
+		chargeChanger = new Button();
+
+		chargeChanger.setOnAction(event -> ball.changeCharge());
+		uiRoot.getChildren().addAll(slider, massSlider, upperPlateDistance, inferiorPlateDistance, chargeChanger,
+				distanceBetweenPlates, massValue, actuatingForce, finalBallVelocity, ballAcceleraction, ballSpeed);
 	}
 
 	@Override
 	protected void initInput() {
+
 	}
 
 	private void initInferiorPlate() {
-		inferiorPlate = new PhysicsEntity(Type.WALL);
-		inferiorPlate.setPosition(198, 271);
-		inferiorPlate.setGraphics(assets.getTexture("inferiorPlate.png"));
-		inferiorPlate.setBodyType(BodyType.KINEMATIC);
-
-		addEntities(inferiorPlate);
+		inferiorPlate = new Plate(198, 271, assets.getTexture("inferiorPlate.png"));
+		addEntities(inferiorPlate.getEntity());
 
 	}
 
 	private void initUpperPlate() {
-		upperPlate = new PhysicsEntity(Type.WALL);
-		upperPlate.setPosition(198, 75);
-		upperPlate.setGraphics(assets.getTexture("upperPlate.png"));
-		upperPlate.setBodyType(BodyType.KINEMATIC);
-
-		addEntities(upperPlate);
+		upperPlate = new Plate(198, 75, assets.getTexture("upperPlate.png"));
+		addEntities(upperPlate.getEntity());
 	}
 
 	private double gravityY;
+	private double linearVelocity = 5;
+	private Point2D previousPosition;
 
 	private void initBall() {
 		ball.changeCharge();
 		ball.initEntity();
 		addEntities(ball.getEntity());
+		previousPosition = ball.getCenter();
 
-		ball.setLinearVelocity(new Point2D(5, 0));
+		ball.setLinearVelocity(new Point2D(linearVelocity, 0));
 
 	}
 
@@ -150,20 +166,17 @@ public class Project extends GameApplication {
 
 	@Override
 	protected void initGame(Pane gameRoot) {
-		ball = new Ball(30d);
 
 		physicsManager.setGravity(0, 0);
 
 		initBackground();
 		initInferiorPlate();
 		initUpperPlate();
-		// initLeftWall();
 		initRightWall();
 
 		initField();
 		initBall();
 	}
-
 
 	private void initField() {
 		field = new Entity(Type.FIELD);
@@ -201,64 +214,73 @@ public class Project extends GameApplication {
 
 	@Override
 	protected void onUpdate(long now) {
-		showMassValue();
-		ball.setMass(massSlider.getValue()); //here the mass of ball is modified according to Slider position
-		gravityY = slider.getValue();
-		
-		updateGravity();
 
-		showDistanceUpperPlate();
-		showDistanceInferiroPlate();
-		showDistanceBetweenPlates();
-		
-		//Need to format this values, put real informations
-		// and put a strategic point on screen
-		actuatingForce.setText("Actuatinc force over particle: " + calculateBallActuatingForce());
-		ballAcceleraction.setText("Particle acceleration: " + calculeteBallAcceleration());
-		finalBallVelocity.setText("Final velocity: " + calculateBallFinalVelocity());
+		ball.setRotate();
+		if (mouse.leftPressed) {
+			ball.getEntity().setLinearVelocity(new Point2D(mouse.x, mouse.y).subtract(ball.getPosition()).multiply(.1));
+		}
+
+		showMassValue();
+		ball.setMass(massSlider.getValue());
+
+		gravityY = getFieldPower();
+		linearVelocity = ballSpeed.getValue();
+
+		showInformations();
+
+		if (isOutOfScreen())
+			initBall();
 
 		if (field.getBoundsInParent().intersects(ball.getBoundsInParent())) {
-			physicsManager.setGravity(0, gravityY);
+			updateGravity();
+			if (isTouchingPlates() && getFieldPower() > 0)
+				initBall();
 		} else {
 			physicsManager.setGravity(0, 0);
 		}
 
-		checkBallIntersec();
+	}
+
+	private double getFieldPower() {
+		return slider.getValue();
+	}
+
+	private boolean isOutOfScreen() {
+		return !background.getBoundsInParent().intersects(ball.getBoundsInParent());
 	}
 
 	private void updateGravity() {
 		if (ball.isPositive()) {
-			gravityY = Math.abs(gravityY + ball.getMass()); // Increased the mass value in the gravity 
+			gravityY = Math.abs(gravityY) + ball.getMass();
 		} else {
-			gravityY = Math.abs(gravityY) * -1 + ball.getMass(); //Increased the mass value in the gravity
+			gravityY = Math.abs(gravityY) * -1 + ball.getMass();
 		}
+
+		physicsManager.setGravity(0, gravityY);
+
 	}
 
-	private void showDistanceBetweenPlates() {
-		int valueDistanceBetweenPlates = (int) Math.abs(
-				upperPlate.getPosition().getY() - (inferiorPlate.getPosition().getY() - inferiorPlate.getHeight()));
-		
-		distanceBetweenPlates.setText("Distance: " + valueDistanceBetweenPlates + "mm");
-	}
-	
-	private void showDistanceUpperPlate() {
-		int valueUpperPlateDistance = (int) Math
-				.abs(ball.getPosition().getY() - (upperPlate.getPosition().getY() + upperPlate.getHeight()));
-		
-		upperPlateDistance.setText("Distance: " + valueUpperPlateDistance + "mm");
-	}
-	
-	private void showDistanceInferiroPlate() {
-		int valueInferiorPlateDistance = (int) Math
-				.abs(ball.getPosition().getY() - (inferiorPlate.getPosition().getY() - inferiorPlate.getHeight()));
-		
-		inferiorPlateDistance.setText("Distance: " + valueInferiorPlateDistance + "mm");
-	}
-	
-	private void showMassValue() {
-		massSlider.setMin(000.1); //if starts with 0 it will be used with gravity and the ball will get down on field area
-		massSlider.setMax(10);    // we need check it out
+	private void showInformations() {
+		distanceBetweenPlates.setText("Distance between plates: "
+				+ String.format("%.2f", upperPlate.distanceOf(inferiorPlate.getEntity())) + "mm");
 
+		upperPlateDistance.setText(
+				"Distance to upper plate: " + String.format("%.2f", upperPlate.distanceOf(ball.getEntity())) + "mm");
+
+		inferiorPlateDistance.setText("Distance to inferior plate: "
+				+ String.format("%.2f", inferiorPlate.distanceOf(ball.getEntity())) + "mm");
+
+		actuatingForce.setText("Actuatinc force over particle: " + calculateBallActuatingForce());
+		ballAcceleraction.setText("Particle acceleration: " + calculeteBallAcceleration());
+
+		double distance = ball.getCenter().distance(previousPosition);
+		previousPosition = ball.getCenter();
+
+		finalBallVelocity.setText("Velocity: " + String.format("%.2f", distance));
+
+	}
+
+	private void showMassValue() {// TODO
 		Double massValueDistanceX = massSlider.getChildrenUnmodifiable().get(1).getLayoutX() + massSlider.getLayoutX()
 				+ 2;
 		Double massValueDistanceY = 535.0;
@@ -268,25 +290,28 @@ public class Project extends GameApplication {
 		int valueMass = ball.getMass().intValue();
 		massValue.setText("" + valueMass);
 	}
-	
-	private void checkBallIntersec() {
 
-		if (!background.getBoundsInParent().intersects(ball.getBoundsInParent())) {
-			initBall();
+	private boolean isTouchingPlates() {
+		if (ball.isPositive()) {
+			if (inferiorPlate.intersects(ball.getEntity())) {
+				return true;
+			}
 		}
 
-		if (inferiorPlate.getBoundsInParent().intersects(ball.getBoundsInParent())) {
-			initBall();
+		else {
+			if (upperPlate.intersects(ball.getEntity())) {
+				return true;
+			}
 		}
 
-		if (upperPlate.getBoundsInParent().intersects(ball.getBoundsInParent())) {
-			initBall();
-		}
+		return false;
+
 	}
-	
-	//Calculate the actuating force on electrical charge (ball)
+
+	// Calculate the actuating force on electrical charge (ball)
 	private Double calculateBallActuatingForce() {
-		Double ballCharge = 10.0;  //It's necessary to define a charge for the ball 
+		Double ballCharge = 10.0; // It's necessary to define a charge for the
+									// ball
 		Double eletricalField = 100.0; // and a value for the field
 		return ballCharge * eletricalField;
 	}
@@ -296,8 +321,9 @@ public class Project extends GameApplication {
 	}
 
 	private Double calculateBallFinalVelocity() {
-		Double initialVelocity = 10.0; //We need set a initial velocity for the ball
-		Double distance = 20.0;        //and put here the distance of plate
+		Double initialVelocity = 10.0; // We need set a initial velocity for the
+										// ball
+		Double distance = 20.0; // and put here the distance of plate
 		Double result = Math.sqrt((initialVelocity * initialVelocity) + 2 * (calculeteBallAcceleration() * distance));
 		return result;
 	}
