@@ -34,6 +34,7 @@ public class Ball {
 		this.radius = radius;
 		this.mass = BALL_MASS;
 		initEntity();
+
 	}
 
 	public boolean isPositive() {
@@ -55,15 +56,16 @@ public class Ball {
 
 		initBodyType();
 
-		entity = new PhysicsEntity(Type.BALL);
+		entity = new PhysicsEntity(Types.BALL);
 		entity.setPosition(posX, posY);
 		entity.setGraphics(texture);
 
 		entity.setFixtureDef(fixtureDef);
 		entity.setBodyDef(bodyDef);
+
 	}
 
-	public void setRotate() {
+	public void disableRotate() {
 		getEntity().setRotate(0);
 	}
 
@@ -125,7 +127,7 @@ public class Ball {
 			this.charge = new Negative();
 		}
 
-		texture = charge.getTexture();
+		texture.setImage(charge.getTexture().getImage());
 		initTexture();
 		entity.setGraphics(texture);
 	}
@@ -145,7 +147,8 @@ public class Ball {
 	}
 
 	public Point2D getCenter() {
-		return new Point2D(getPosition().getX() + getWidth() / 2, getPosition().getY() + getHeight() / 2);
+		return new Point2D(getPosition().getX() + getWidth() / 2,
+				getPosition().getY() + getHeight() / 2);
 	}
 
 	private double getHeight() {
