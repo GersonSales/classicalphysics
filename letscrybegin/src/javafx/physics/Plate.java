@@ -80,7 +80,7 @@ public class Plate {
 	}
 
 	public void setFieldStrength(double value) {
-		field.setOpacity(value / 10.);
+		field.setOpacity(value / 40.);
 
 	}
 

@@ -49,7 +49,7 @@ public class Ball {
 		return this.radius;
 	}
 
-	void initEntity() {
+	protected void initEntity() {
 		initFixtureDef();
 
 		initTexture();
@@ -130,6 +130,11 @@ public class Ball {
 		texture.setImage(charge.getTexture().getImage());
 		initTexture();
 		entity.setGraphics(texture);
+	}
+	
+	public boolean intersects(PhysicsEntity otherEntity) {
+		return getEntity().getBoundsInParent()
+				.intersects(otherEntity.getBoundsInParent());
 	}
 
 	public double distanceOf(PhysicsEntity otherEntity) {
