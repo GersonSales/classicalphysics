@@ -14,8 +14,8 @@ import javafx.scene.shape.Rectangle;
 
 public class Project extends GameApplication {
 
-	private final int WIDTH = 800;
-	private final int HEIGHT = 600;
+	private final int WIDTH = 790;
+	private final int HEIGHT = 570;
 
 	private Assets assets;
 
@@ -31,15 +31,17 @@ public class Project extends GameApplication {
 
 	@Override
 	protected void initSettings(GameSettings settings) {
+		System.out.println("initSettings");
 		settings.setTitle("Classical Physic");
 		settings.setVersion("DEMO");
 		settings.setWidth(WIDTH);
 		settings.setHeight(HEIGHT);
-
 	}
 
 	@Override
 	protected void initAssets() throws Exception {
+		System.out.println("initAssets");
+
 		assets = assetManager.cache();
 		assets.logCached();
 		ball = new Ball(30d, 660, 180);
@@ -48,6 +50,8 @@ public class Project extends GameApplication {
 
 	@Override
 	protected void initUI(Pane uiRoot) {
+		System.out.println("initUI");
+
 		menu = new Menu(uiRoot);
 
 		menu.setButtonChargeEvent(event -> ball.changeCharge());
@@ -56,6 +60,7 @@ public class Project extends GameApplication {
 
 	@Override
 	protected void initInput() {
+		System.out.println("initInput");
 
 	}
 
@@ -90,6 +95,7 @@ public class Project extends GameApplication {
 
 	@Override
 	protected void initGame(Pane gameRoot) {
+		System.out.println("initGame");
 
 		physicsManager.setGravity(0, 0);
 
@@ -153,7 +159,6 @@ public class Project extends GameApplication {
 
 	@Override
 	protected void onUpdate(long now) {
-
 		upperPlate.setFieldStrength(menu.getSliderValue());
 		inferiorPlate.setFieldStrength(menu.getSliderValue());
 
@@ -253,7 +258,9 @@ public class Project extends GameApplication {
 
 	private void updateBallInformation() {
 		double time = (System.currentTimeMillis() - previousTime) / 1000.0;
-		previousTime = System.currentTimeMillis();
+		if (!ball.getCenter().equals(previousPosition)) {
+			previousTime = System.currentTimeMillis();
+		}
 
 		double distance = (ball.getCenter().distance(previousPosition)) * 2.54
 				/ 96.;
@@ -267,14 +274,6 @@ public class Project extends GameApplication {
 		menu.setAverageTime(time * Math.pow(10, 2), -2);
 		menu.setAverageAceleration(aceleration / Math.pow(10, 1), 1);
 		menu.setBallVelocity(velocity, 0);
-
-		// System.out.println("Distance(in cm): " + distance);
-		// System.out.println("Time(in sec): " + time);
-		// System.out.println("Velocity: " + velocity);
-		//
-		// System.out.println("Aceleration: " + aceleration);
-		//
-		// System.out.println("sada: " + 264 * Math.pow(10, -4));
 
 	}
 
