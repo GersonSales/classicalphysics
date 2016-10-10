@@ -31,9 +31,8 @@ public class Utils {
 	public final static int NO_OF_BALLS = 1000;
 
 	// Ball gradient
-	private final static LinearGradient BALL_GRADIENT = new LinearGradient(0.0,
-			0.0, 1.0, 0.0, true, CycleMethod.NO_CYCLE,
-			new Stop[] { new Stop(0, Color.WHITE), new Stop(1, Color.BLACK) });
+	private final static LinearGradient BALL_GRADIENT = new LinearGradient(0.0, 0.0, 1.0, 0.0, true,
+			CycleMethod.NO_CYCLE, new Stop[] { new Stop(0, Color.WHITE), new Stop(1, Color.BLACK) });
 
 	// This method adds a ground to the screen.
 	public static void addGround(float width, float height) {
@@ -50,8 +49,7 @@ public class Utils {
 	}
 
 	// This method creates a walls.
-	public static void addWall(float posX, float posY, float width,
-			float height) {
+	public static void addWall(float posX, float posY, float width, float height) {
 		PolygonShape ps = new PolygonShape();
 		ps.setAsBox(width, height);
 
@@ -71,9 +69,8 @@ public class Utils {
 		if (color.equals(Color.RED))
 			return BALL_GRADIENT;
 		else
-			return new LinearGradient(0.0, 0.0, 1.0, 0.0, true,
-					CycleMethod.NO_CYCLE, new Stop[] { new Stop(0, Color.WHITE),
-							new Stop(1, color) });
+			return new LinearGradient(0.0, 0.0, 1.0, 0.0, true, CycleMethod.NO_CYCLE,
+					new Stop[] { new Stop(0, Color.WHITE), new Stop(1, color) });
 	}
 
 	// Convert a JBox2D x coordinate to a JavaFX pixel x coordinate

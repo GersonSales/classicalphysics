@@ -17,8 +17,7 @@ public class Plate {
 	private double posY;
 
 	public Plate(double posX, double posY, Types type) {
-		charge = type.equals(Types.POSITIVE_PLATE) ? new PositivePlate()
-				: new NegativePlate();
+		charge = type.equals(Types.POSITIVE_PLATE) ? new PositivePlate() : new NegativePlate();
 
 		this.entity = new PhysicsEntity(type);
 		entity.setPosition(posX, posY);
@@ -58,8 +57,7 @@ public class Plate {
 	}
 
 	public boolean intersects(PhysicsEntity otherEntity) {
-		return getEntity().getBoundsInParent()
-				.intersects(otherEntity.getBoundsInParent());
+		return getEntity().getBoundsInParent().intersects(otherEntity.getBoundsInParent());
 	}
 
 	public double getWidth() {

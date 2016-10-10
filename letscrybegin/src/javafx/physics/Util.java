@@ -10,8 +10,7 @@ public class Util {
 		return position.distance(otherPosition);
 	}
 
-	public static double distanceOf(PhysicsEntity entity,
-			PhysicsEntity otherEntity) {
+	public static double distanceOf(PhysicsEntity entity, PhysicsEntity otherEntity) {
 		double posX = entity.getPosition().getX();
 		double posY = entity.getPosition().getY();
 
@@ -34,13 +33,10 @@ public class Util {
 
 		}
 
-		for (int x = (int) posXEntity; x <= posXEntity
-				+ otherEntity.getWidth(); x++) {
-			for (int y = (int) posYEntity; y <= posYEntity
-					+ otherEntity.getHeight(); y++) {
+		for (int x = (int) posXEntity; x <= posXEntity + otherEntity.getWidth(); x++) {
+			for (int y = (int) posYEntity; y <= posYEntity + otherEntity.getHeight(); y++) {
 				double distance = distance(x, lowestX, y, lowestY);
-				lowestDistance = distance < lowestDistance ? distance
-						: lowestDistance;
+				lowestDistance = distance < lowestDistance ? distance : lowestDistance;
 			}
 
 		}
@@ -67,7 +63,6 @@ public class Util {
 		str = str.replaceAll("9", "⁹");
 		str = str.replaceAll("-", "⁻");
 
-		
 		return str;
 	}
 

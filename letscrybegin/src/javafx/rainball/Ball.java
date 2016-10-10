@@ -43,8 +43,7 @@ public class Ball {
 		this.posY = posY;
 	}
 
-	public Ball(float posX, float posY, int radius, BodyType bodyType,
-			Color color) {
+	public Ball(float posX, float posY, int radius, BodyType bodyType, Color color) {
 		this.posX = posX;
 		this.posY = posY;
 		this.radius = radius;

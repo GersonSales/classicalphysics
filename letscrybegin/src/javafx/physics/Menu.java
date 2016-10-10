@@ -77,11 +77,9 @@ public class Menu {
 
 		cbMouseEnabled = new CheckBox("Enable Mouse");
 
-		uiRoot.getChildren().addAll(slFieldPower, slBallMass,
-				lUpperPlateDistance, lInferiorPlateDistance, bChargeChanger,
-				lDistanceBetweenPlates, lMassValue, lActuatingForce,
-				lAverageVolocity, slBallSpeed, cbMouseEnabled, bResetBall,
-				lAverageDistance, lAverageTime, lAverageAceleration);
+		uiRoot.getChildren().addAll(slFieldPower, slBallMass, lUpperPlateDistance, lInferiorPlateDistance,
+				bChargeChanger, lDistanceBetweenPlates, lMassValue, lActuatingForce, lAverageVolocity, slBallSpeed,
+				cbMouseEnabled, bResetBall, lAverageDistance, lAverageTime, lAverageAceleration);
 
 	}
 
@@ -172,35 +170,29 @@ public class Menu {
 	}
 
 	public void setDistanceBetweenPlates(double distance) {
-		lDistanceBetweenPlates.setText("Distance between plates: "
-				+ String.format("%.2f", distance) + "mm");
+		lDistanceBetweenPlates.setText("Distance between plates: " + String.format("%.2f", distance) + "mm");
 
 	}
 
 	public void setDistanceUpperPlate(double distance) {
 
-		lUpperPlateDistance.setText("Distance to upper plate: "
-				+ String.format("%.2f", distance) + "mm");
+		lUpperPlateDistance.setText("Distance to upper plate: " + String.format("%.2f", distance) + "mm");
 	}
 
 	public void setDistanceInferiorPlate(double distance) {
-		lInferiorPlateDistance.setText("Distance to inferior plate: "
-				+ String.format("%.2f", distance) + "mm");
+		lInferiorPlateDistance.setText("Distance to inferior plate: " + String.format("%.2f", distance) + "mm");
 
 	}
 
 	public void setBallVelocity(double velocity, int exp) {
 		String expToStr = Util.superscript(exp + "");
-		lAverageVolocity.setText("Velocity: " + String.format("%.2f", velocity)
-				+ "* 10" + expToStr + "mm/s");
+		lAverageVolocity.setText("Velocity: " + String.format("%.2f", velocity) + "* 10" + expToStr + "mm/s");
 
 	}
 
 	public void setDistanceValue(double distance, int exp) {
 		String expToStr = Util.superscript(exp + "");
-		lAverageDistance
-				.setText("Average distance: " + String.format("%.2f", distance)
-						+ " * 10" + expToStr + " cm/s");
+		lAverageDistance.setText("Average distance: " + String.format("%.2f", distance) + " * 10" + expToStr + " cm/s");
 
 	}
 
@@ -215,16 +207,14 @@ public class Menu {
 
 	public void setAverageTime(double time, int exp) {
 		String expToStr = Util.superscript(exp + "");
-		lAverageTime.setText("Average time: " + String.format("%.2f", time)
-				+ " * 10" + expToStr + " seconds");
+		lAverageTime.setText("Average time: " + String.format("%.2f", time) + " * 10" + expToStr + " seconds");
 
 	}
 
 	public void setAverageAceleration(double aceleration, int exp) {
 		String expToStr = Util.superscript(exp + "");
-		lAverageAceleration.setText(
-				"Average aceleration: " + String.format("%.2f", aceleration)
-						+ " * 10" + expToStr + " cm/s");
+		lAverageAceleration
+				.setText("Average aceleration: " + String.format("%.2f", aceleration) + " * 10" + expToStr + " cm/s");
 	}
 
 }

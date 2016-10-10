@@ -211,8 +211,8 @@ public class Project extends GameApplication {
 	private void uptadeMouseControl() {
 		if (menu.isMouseEnabled()) {
 			if (mouse.leftPressed) {
-				ball.getEntity().setLinearVelocity(new Point2D(mouse.x, mouse.y)
-						.subtract(ball.getPosition()).multiply(.1));
+				ball.getEntity()
+						.setLinearVelocity(new Point2D(mouse.x, mouse.y).subtract(ball.getPosition()).multiply(.1));
 			}
 		}
 
@@ -223,8 +223,7 @@ public class Project extends GameApplication {
 	}
 
 	private boolean isOutOfScreen() {
-		return !background.getBoundsInParent()
-				.intersects(ball.getBoundsInParent());
+		return !background.getBoundsInParent().intersects(ball.getBoundsInParent());
 	}
 
 	private void updateGravity() {
@@ -242,13 +241,11 @@ public class Project extends GameApplication {
 	}
 
 	private void showInformations() {
-		menu.setDistanceBetweenPlates(
-				upperPlate.distanceOf(inferiorPlate.getEntity()));
+		menu.setDistanceBetweenPlates(upperPlate.distanceOf(inferiorPlate.getEntity()));
 
 		menu.setDistanceUpperPlate(upperPlate.distanceOf(ball.getEntity()));
 
-		menu.setDistanceInferiorPlate(
-				inferiorPlate.distanceOf(ball.getEntity()));
+		menu.setDistanceInferiorPlate(inferiorPlate.distanceOf(ball.getEntity()));
 
 		updateBallInformation();
 
@@ -262,8 +259,7 @@ public class Project extends GameApplication {
 			previousTime = System.currentTimeMillis();
 		}
 
-		double distance = (ball.getCenter().distance(previousPosition)) * 2.54
-				/ 96.;
+		double distance = (ball.getCenter().distance(previousPosition)) * 2.54 / 96.;
 		previousPosition = ball.getCenter();
 
 		double velocity = distance / time;

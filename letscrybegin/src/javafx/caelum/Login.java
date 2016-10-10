@@ -49,8 +49,7 @@ public class Login extends Application {
 
 		anchorPane = new AnchorPane();
 		anchorPane.setPrefSize(WIDTH, HEIGHT);
-		anchorPane.setStyle(
-				"-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, white 0%, black 100%);");
+		anchorPane.setStyle("-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, white 0%, black 100%);");
 
 		loginField = new TextField();
 		loginField.setPromptText("login");
@@ -60,11 +59,10 @@ public class Login extends Application {
 
 		enterButton = new Button("Enter");
 		exitButton = new Button("exit");
-		
+
 		Slider slider = new Slider();
 
-		anchorPane.getChildren().addAll(loginField, passwdField, enterButton,
-				exitButton, slider);
+		anchorPane.getChildren().addAll(loginField, passwdField, enterButton, exitButton, slider);
 	}
 
 	private void initListeners() {
@@ -77,12 +75,10 @@ public class Login extends Application {
 			if (passwdField.getText().equals("")) {
 				// TODO open shop
 			} else {
-				JOptionPane.showMessageDialog(null, "Invalid password!",
-						"Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Invalid password!", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		} else {
-			JOptionPane.showMessageDialog(null, "Invalid login!", "Error",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Invalid login!", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

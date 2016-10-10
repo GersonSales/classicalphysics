@@ -131,10 +131,9 @@ public class Ball {
 		initTexture();
 		entity.setGraphics(texture);
 	}
-	
+
 	public boolean intersects(PhysicsEntity otherEntity) {
-		return getEntity().getBoundsInParent()
-				.intersects(otherEntity.getBoundsInParent());
+		return getEntity().getBoundsInParent().intersects(otherEntity.getBoundsInParent());
 	}
 
 	public double distanceOf(PhysicsEntity otherEntity) {
@@ -152,8 +151,7 @@ public class Ball {
 	}
 
 	public Point2D getCenter() {
-		return new Point2D(getPosition().getX() + getWidth() / 2,
-				getPosition().getY() + getHeight() / 2);
+		return new Point2D(getPosition().getX() + getWidth() / 2, getPosition().getY() + getHeight() / 2);
 	}
 
 	private double getHeight() {

@@ -58,11 +58,9 @@ public class ShowCase extends Application {
 
 		anchorPane.getChildren().addAll(searchField, table);
 
-		nameColumn.setCellValueFactory(
-				new PropertyValueFactory<ItensProperty, String>("produto"));
+		nameColumn.setCellValueFactory(new PropertyValueFactory<ItensProperty, String>("produto"));
 
-		priceColumn.setCellValueFactory(
-				new PropertyValueFactory<ItensProperty, Double>("preco"));
+		priceColumn.setCellValueFactory(new PropertyValueFactory<ItensProperty, Double>("preco"));
 
 	}
 
