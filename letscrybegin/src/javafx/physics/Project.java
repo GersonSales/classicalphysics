@@ -1,7 +1,5 @@
 package javafx.physics;
 
-import java.awt.TexturePaint;
-
 import com.almasb.fxgl.GameApplication;
 import com.almasb.fxgl.GameSettings;
 import com.almasb.fxgl.asset.Assets;
