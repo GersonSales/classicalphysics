@@ -32,7 +32,6 @@ public class Ball {
 		this.posX = posX;
 		this.posY = posY;
 		this.charge = new Positive();
-		this.chargeValue = 10;
 		this.texture = this.charge.getTexture();
 		this.radius = radius;
 		this.mass = BALL_MASS;

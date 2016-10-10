@@ -144,8 +144,8 @@ public class Menu {
 		slFieldPower.setMax(40);
 		slBallSpeed.setMin(2);
 		slBallSpeed.setMax(40);
-		slBallCharge.setMin(.1);
-		slBallCharge.setMax(100);
+		slBallCharge.setMin(-10);
+		slBallCharge.setMax(10);
 	}
 
 	public boolean isMouseEnabled() {
