@@ -17,10 +17,10 @@ public class Wire {
 	
 	public Wire(Double posX, Double posY, Types type, Texture texture) {
 		this.entity = new PhysicsEntity(type);
-		initBodyType();
 		entity.setPosition(posX,  posY);
-		entity.setBodyType(BodyType.STATIC);
+		entity.setBodyType(BodyType.DYNAMIC);
 		entity.setGraphics(texture);
+		initBodyType();
 	}
 	
 	public PhysicsEntity getEntity() {

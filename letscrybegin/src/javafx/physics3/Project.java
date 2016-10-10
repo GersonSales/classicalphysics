@@ -1,8 +1,5 @@
 package javafx.physics3;
 
-import org.jbox2d.dynamics.BodyDef;
-import org.jbox2d.dynamics.FixtureDef;
-
 import com.almasb.fxgl.GameApplication;
 import com.almasb.fxgl.GameSettings;
 import com.almasb.fxgl.asset.Assets;

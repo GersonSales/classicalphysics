@@ -26,10 +26,13 @@ public class Ball {
 	private double posX;
 	private double posY;
 
+	private double chargeValue;
+
 	public Ball(Double radius, double posX, double posY) {
 		this.posX = posX;
 		this.posY = posY;
 		this.charge = new Positive();
+		this.chargeValue = 10;
 		this.texture = this.charge.getTexture();
 		this.radius = radius;
 		this.mass = BALL_MASS;
@@ -123,18 +126,28 @@ public class Ball {
 	public void changeCharge() {
 		if (this.charge instanceof Negative) {
 			this.charge = new Positive();
+			this.chargeValue = 10;
 		} else {
 			this.charge = new Negative();
+			this.chargeValue = -10;
+
 		}
 
 		texture.setImage(charge.getTexture().getImage());
 		initTexture();
 		entity.setGraphics(texture);
 	}
-	
+
+	public double getChargeValue() {
+		return this.chargeValue;
+	}
+
+	public void setChargeValue(double charge) {
+		this.chargeValue = charge;
+	}
+
 	public boolean intersects(PhysicsEntity otherEntity) {
-		return getEntity().getBoundsInParent()
-				.intersects(otherEntity.getBoundsInParent());
+		return getEntity().getBoundsInParent().intersects(otherEntity.getBoundsInParent());
 	}
 
 	public double distanceOf(PhysicsEntity otherEntity) {
@@ -152,8 +165,7 @@ public class Ball {
 	}
 
 	public Point2D getCenter() {
-		return new Point2D(getPosition().getX() + getWidth() / 2,
-				getPosition().getY() + getHeight() / 2);
+		return new Point2D(getPosition().getX() + getWidth() / 2, getPosition().getY() + getHeight() / 2);
 	}
 
 	private double getHeight() {

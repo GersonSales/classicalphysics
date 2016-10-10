@@ -1,6 +1,7 @@
 package javafx.physics;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -17,13 +18,13 @@ public class Menu {
 	private final Font FONT = new Font(MAX_FONT_SIZE);
 
 	private Slider slFieldPower;
-	private Slider slBallMass;
+	private Slider slBallCharge;
 	private Slider slBallSpeed;
 
 	private Label lUpperPlateDistance;
 	private Label lInferiorPlateDistance;
 	private Label lDistanceBetweenPlates;
-	private Label lMassValue;
+	private Label lChargeValue;
 	private Label lActuatingForce;
 	private Label lAverageVolocity;
 	private Label lAverageDistance;
@@ -32,6 +33,7 @@ public class Menu {
 
 	private Button bChargeChanger;
 	private Button bResetBall;
+	private Button bPause;
 
 	private CheckBox cbMouseEnabled;
 
@@ -42,7 +44,7 @@ public class Menu {
 
 	private void initComponents(Pane uiRoot) {
 		slFieldPower = new Slider();
-		slBallMass = new Slider();
+		slBallCharge = new Slider();
 		slBallSpeed = new Slider();
 
 		lUpperPlateDistance = new Label();
@@ -54,8 +56,8 @@ public class Menu {
 		lDistanceBetweenPlates = new Label();
 		lDistanceBetweenPlates.setFont(FONT);
 
-		lMassValue = new Label();
-		lMassValue.setFont(FONT);
+		lChargeValue = new Label();
+		lChargeValue.setFont(FONT);
 
 		lActuatingForce = new Label();
 		lActuatingForce.setFont(FONT);
@@ -74,27 +76,26 @@ public class Menu {
 
 		bChargeChanger = new Button("Change charge");
 		bResetBall = new Button("Reset ball");
+		bPause = new Button("Pause");
 
 		cbMouseEnabled = new CheckBox("Enable Mouse");
 
-		uiRoot.getChildren().addAll(slFieldPower, slBallMass,
-				lUpperPlateDistance, lInferiorPlateDistance, bChargeChanger,
-				lDistanceBetweenPlates, lMassValue, lActuatingForce,
-				lAverageVolocity, slBallSpeed, cbMouseEnabled, bResetBall,
-				lAverageDistance, lAverageTime, lAverageAceleration);
+		uiRoot.getChildren().addAll(slFieldPower, slBallCharge, lUpperPlateDistance, lInferiorPlateDistance,
+				bChargeChanger, lDistanceBetweenPlates, lChargeValue, lActuatingForce, lAverageVolocity, slBallSpeed,
+				cbMouseEnabled, bResetBall, lAverageDistance, lAverageTime, lAverageAceleration, bPause);
 
 	}
 
 	private void initLayout() {
 		initSlidersRange();
 		initHandlers();
-		slFieldPower.setLayoutX(510);
-		slBallSpeed.setLayoutX(510);
-		slBallMass.setLayoutX(510);
+		slFieldPower.setLayoutX(350);
+		slBallSpeed.setLayoutX(350);
+		slBallCharge.setLayoutX(350);
 
 		slFieldPower.setLayoutY(410);
 		slBallSpeed.setLayoutY(430);
-		slBallMass.setLayoutY(450);
+		slBallCharge.setLayoutY(450);
 
 		lUpperPlateDistance.setLayoutX(10);
 		lInferiorPlateDistance.setLayoutX(10);
@@ -103,6 +104,7 @@ public class Menu {
 		lAverageTime.setLayoutX(10);
 		lAverageVolocity.setLayoutX(10);
 		lAverageAceleration.setLayoutX(10);
+		lActuatingForce.setLayoutX(10);
 
 		lUpperPlateDistance.setLayoutY(420);
 		lInferiorPlateDistance.setLayoutY(440);
@@ -111,14 +113,17 @@ public class Menu {
 		lAverageDistance.setLayoutY(500);
 		lAverageVolocity.setLayoutY(520);
 		lAverageAceleration.setLayoutY(540);
+		lActuatingForce.setLayoutY(560);
 
-		bChargeChanger.setLayoutX(500);
-		bResetBall.setLayoutX(500);
+		bChargeChanger.setLayoutX(550);
+		bResetBall.setLayoutX(550);
+		bPause.setLayoutX(550);
 
-		bChargeChanger.setLayoutY(550);
-		bResetBall.setLayoutY(575);
+		bChargeChanger.setLayoutY(410);
+		bResetBall.setLayoutY(440);
+		bPause.setLayoutY(470);
 
-		cbMouseEnabled.setLayoutX(500);
+		cbMouseEnabled.setLayoutX(350);
 		cbMouseEnabled.setLayoutY(475);
 	}
 
@@ -139,8 +144,8 @@ public class Menu {
 		slFieldPower.setMax(40);
 		slBallSpeed.setMin(2);
 		slBallSpeed.setMax(40);
-		slBallMass.setMin(.1);
-		slBallMass.setMax(100);
+		slBallCharge.setMin(.1);
+		slBallCharge.setMax(100);
 	}
 
 	public boolean isMouseEnabled() {
@@ -163,8 +168,8 @@ public class Menu {
 		return this.slFieldPower.getValue();
 	}
 
-	public Double getMassSliderValue() {
-		return this.slBallMass.getValue();
+	public Double getChargeSliderValue() {
+		return this.slBallCharge.getValue();
 	}
 
 	public double getBallSpeedValue() {
@@ -172,35 +177,29 @@ public class Menu {
 	}
 
 	public void setDistanceBetweenPlates(double distance) {
-		lDistanceBetweenPlates.setText("Distance between plates: "
-				+ String.format("%.2f", distance) + "mm");
+		lDistanceBetweenPlates.setText("Distance between plates: " + String.format("%.2f", distance) + "mm");
 
 	}
 
 	public void setDistanceUpperPlate(double distance) {
 
-		lUpperPlateDistance.setText("Distance to upper plate: "
-				+ String.format("%.2f", distance) + "mm");
+		lUpperPlateDistance.setText("Distance to upper plate: " + String.format("%.2f", distance) + "mm");
 	}
 
 	public void setDistanceInferiorPlate(double distance) {
-		lInferiorPlateDistance.setText("Distance to inferior plate: "
-				+ String.format("%.2f", distance) + "mm");
+		lInferiorPlateDistance.setText("Distance to inferior plate: " + String.format("%.2f", distance) + "mm");
 
 	}
 
 	public void setBallVelocity(double velocity, int exp) {
 		String expToStr = Util.superscript(exp + "");
-		lAverageVolocity.setText("Velocity: " + String.format("%.2f", velocity)
-				+ "* 10" + expToStr + "mm/s");
+		lAverageVolocity.setText("Velocity: " + String.format("%.2f", velocity) + "* 10" + expToStr + "mm/s");
 
 	}
 
 	public void setDistanceValue(double distance, int exp) {
 		String expToStr = Util.superscript(exp + "");
-		lAverageDistance
-				.setText("Average distance: " + String.format("%.2f", distance)
-						+ " * 10" + expToStr + " cm/s");
+		lAverageDistance.setText("Average distance: " + String.format("%.2f", distance) + " * 10" + expToStr + " cm/s");
 
 	}
 
@@ -213,18 +212,27 @@ public class Menu {
 
 	}
 
+	public void setButtonPauseEvent(EventHandler<ActionEvent> event) {
+		bPause.setOnAction(event);
+	}
+
 	public void setAverageTime(double time, int exp) {
 		String expToStr = Util.superscript(exp + "");
-		lAverageTime.setText("Average time: " + String.format("%.2f", time)
-				+ " * 10" + expToStr + " seconds");
+		lAverageTime.setText("Average time: " + String.format("%.2f", time) + " * 10" + expToStr + " seconds");
 
 	}
 
 	public void setAverageAceleration(double aceleration, int exp) {
 		String expToStr = Util.superscript(exp + "");
-		lAverageAceleration.setText(
-				"Average aceleration: " + String.format("%.2f", aceleration)
-						+ " * 10" + expToStr + " cm/s");
+		lAverageAceleration
+				.setText("Average aceleration: " + String.format("%.2f", aceleration) + " * 10" + expToStr + " cm/s");
+	}
+
+	public void setActuatingForce(Double force, int exp) {
+		String expToStr = Util.superscript(exp + "");
+		lActuatingForce
+				.setText("Actuating Force: " + String.format("%.2f", force) + " * 10" + expToStr + " N");
+		
 	}
 
 }

@@ -13,7 +13,7 @@ import javafx.scene.shape.Rectangle;
 public class Project extends GameApplication {
 
 	private final int WIDTH = 790;
-	private final int HEIGHT = 570;
+	private final int HEIGHT = 590;
 
 	private Assets assets;
 
@@ -29,7 +29,6 @@ public class Project extends GameApplication {
 
 	@Override
 	protected void initSettings(GameSettings settings) {
-		System.out.println("initSettings");
 		settings.setTitle("Classical Physic");
 		settings.setVersion("DEMO");
 		settings.setWidth(WIDTH);
@@ -38,27 +37,35 @@ public class Project extends GameApplication {
 
 	@Override
 	protected void initAssets() throws Exception {
-		System.out.println("initAssets");
-
 		assets = assetManager.cache();
 		assets.logCached();
 		ball = new Ball(30d, 660, 180);
 
 	}
 
+	private boolean isPaused = false;
+
 	@Override
 	protected void initUI(Pane uiRoot) {
-		System.out.println("initUI");
-
 		menu = new Menu(uiRoot);
 
 		menu.setButtonChargeEvent(event -> ball.changeCharge());
 		menu.setResetBallEvent(event -> initBall());
+
+		menu.setButtonPauseEvent(event -> {
+			if (!isPaused) {
+				isPaused = true;
+				pause();
+			} else {
+				resume();
+				isPaused = false;
+			}
+		});
+
 	}
 
 	@Override
 	protected void initInput() {
-		System.out.println("initInput");
 
 	}
 
@@ -93,7 +100,6 @@ public class Project extends GameApplication {
 
 	@Override
 	protected void initGame(Pane gameRoot) {
-		System.out.println("initGame");
 
 		physicsManager.setGravity(0, 0);
 
@@ -157,6 +163,7 @@ public class Project extends GameApplication {
 
 	@Override
 	protected void onUpdate(long now) {
+
 		upperPlate.setFieldStrength(menu.getSliderValue());
 		inferiorPlate.setFieldStrength(menu.getSliderValue());
 
@@ -166,7 +173,7 @@ public class Project extends GameApplication {
 		updateLimits();
 		updateGravity();
 
-		ball.setMass(menu.getMassSliderValue());// massSlider.getValue());
+		ball.setChargeValue(menu.getChargeSliderValue());// massSlider.getValue());
 
 		fieldPower = getFieldPower();
 		linearVelocity = menu.getBallSpeedValue();// ballSpeed.getValue();
@@ -209,8 +216,8 @@ public class Project extends GameApplication {
 	private void uptadeMouseControl() {
 		if (menu.isMouseEnabled()) {
 			if (mouse.leftPressed) {
-				ball.getEntity().setLinearVelocity(new Point2D(mouse.x, mouse.y)
-						.subtract(ball.getPosition()).multiply(.1));
+				ball.getEntity()
+						.setLinearVelocity(new Point2D(mouse.x, mouse.y).subtract(ball.getPosition()).multiply(.1));
 			}
 		}
 
@@ -221,8 +228,7 @@ public class Project extends GameApplication {
 	}
 
 	private boolean isOutOfScreen() {
-		return !background.getBoundsInParent()
-				.intersects(ball.getBoundsInParent());
+		return !background.getBoundsInParent().intersects(ball.getBoundsInParent());
 	}
 
 	private void updateGravity() {
@@ -240,13 +246,11 @@ public class Project extends GameApplication {
 	}
 
 	private void showInformations() {
-		menu.setDistanceBetweenPlates(
-				upperPlate.distanceOf(inferiorPlate.getEntity()));
+		menu.setDistanceBetweenPlates(upperPlate.distanceOf(inferiorPlate.getEntity()));
 
 		menu.setDistanceUpperPlate(upperPlate.distanceOf(ball.getEntity()));
 
-		menu.setDistanceInferiorPlate(
-				inferiorPlate.distanceOf(ball.getEntity()));
+		menu.setDistanceInferiorPlate(inferiorPlate.distanceOf(ball.getEntity()));
 
 		updateBallInformation();
 
@@ -256,12 +260,12 @@ public class Project extends GameApplication {
 
 	private void updateBallInformation() {
 		double time = (System.currentTimeMillis() - previousTime) / 1000.0;
+
 		if (!ball.getCenter().equals(previousPosition)) {
 			previousTime = System.currentTimeMillis();
 		}
 
-		double distance = (ball.getCenter().distance(previousPosition)) * 2.54
-				/ 96.;
+		double distance = (ball.getCenter().distance(previousPosition)) * 2.54 / 96.;
 		previousPosition = ball.getCenter();
 
 		double velocity = distance / time;
@@ -272,6 +276,7 @@ public class Project extends GameApplication {
 		menu.setAverageTime(time * Math.pow(10, 2), -2);
 		menu.setAverageAceleration(aceleration / Math.pow(10, 1), 1);
 		menu.setBallVelocity(velocity, 0);
+		menu.setActuatingForce(getActuatingForce(), 0);
 
 	}
 
@@ -293,10 +298,9 @@ public class Project extends GameApplication {
 	}
 
 	// Calculate the actuating force on electrical charge (ball)
-	private Double calculateBallActuatingForce() {
-		Double ballCharge = 10.0; // It's necessary to define a charge for the
-									// ball
-		Double eletricalField = 100.0; // and a value for the field
+	private Double getActuatingForce() {
+		Double ballCharge = ball.getChargeValue();
+		Double eletricalField = fieldPower;
 		return ballCharge * eletricalField;
 	}
 }
