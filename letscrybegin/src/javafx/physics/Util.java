@@ -1,5 +1,6 @@
 package javafx.physics;
 
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.PhysicsEntity;
 
 import javafx.geometry.Point2D;
@@ -10,7 +11,7 @@ public class Util {
 		return position.distance(otherPosition);
 	}
 
-	public static double distanceOf(PhysicsEntity entity, PhysicsEntity otherEntity) {
+	public static Double distanceOf(Entity entity, Entity otherEntity) {
 		double posX = entity.getPosition().getX();
 		double posY = entity.getPosition().getY();
 
